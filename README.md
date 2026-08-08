@@ -51,7 +51,12 @@ http://localhost -> frondend \
 http://localhost/api/ -> backend \
 http://localhost/admin -> django admin
 
-# Даные для тестирования
+# Tests
+Django tests
+``` bash
+cd backend/ && pytest
+```
+
 При запуске контейнера автоматически создаются пользователи
 
 Role | Email | Password |
