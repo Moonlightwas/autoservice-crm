@@ -47,6 +47,7 @@
                 type="password"
                 v-model="password"
                 :error-source="error"
+                v-model:show-password="showPassword"
               />
 
               <FormInput
@@ -55,6 +56,7 @@
                 type="password"
                 v-model="password_confirm"
                 :error-source="error"
+                v-model:show-password="showPassword"
               />
 
               <button type="submit" class="btn btn-primary w-100">Sign In</button>
@@ -89,7 +91,8 @@ export default {
         phone: '',
         error: '',
         isSuccess: false,
-        successMessage: ''
+        successMessage: '',
+        showPassword: false
     }
   },
   methods: {

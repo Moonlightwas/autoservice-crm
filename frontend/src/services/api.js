@@ -52,7 +52,7 @@ applyAuthTokenInterceptor(api, {
   },
 
   crossTabSync: true,
-  debug: true
+  debug: false
 })
 
 export const register = (email, password, password_confirm, first_name, last_name, phone) => {

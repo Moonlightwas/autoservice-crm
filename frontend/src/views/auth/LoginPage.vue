@@ -20,6 +20,7 @@
                 type="password"
                 v-model="password"
                 :error-source="error"
+                v-model:show-password="showPassword"
               />
               
               <button type="submit" class="btn btn-primary w-100">Sign In</button>
@@ -48,7 +49,8 @@ export default {
     return {
       email: '',
       password: '',
-      error: null
+      error: null,
+      showPassword: false
     }
   },
 
@@ -57,7 +59,7 @@ export default {
       if (!this.error) return false;
 
       if (typeof this.error === 'string') {
-        return { 'Error': this.error }
+        return this.error
       }
 
       if (this.error.detail) {
