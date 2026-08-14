@@ -13,7 +13,7 @@ import CarCreate from '@/views/CarCreate.vue'
 import CarDetail from '@/views/CarDetail.vue'
 import StaffPage from '@/views/StaffPage.vue'
 import StaffDetail from '@/views/StaffDetail.vue'
-import HomeLayout from '@/components/layouts/HomeLayout.vue'
+import HomePage from '@/views/HomePage.vue'
 
 
 
@@ -21,7 +21,7 @@ const routes = [
   // public
   {
     path: '/',name: "Home",
-    component: HomeLayout,
+    component: HomePage,
     meta: {title: 'Home'}
   },
 
@@ -148,7 +148,16 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if ((to.name === 'Login' || to.name === 'Register') && authStore.isAuthenticated) {
-    return next({ name: 'Profile' });
+    return next({ name: 'Home' });
+  }
+
+  if (authStore.isAuthenticated && to.path === '/') {
+    const role = authStore.user?.role;
+    if (['manager', 'admin', 'mechanic'].includes(role)) {
+      return next({ name: 'Dashboard' });
+    } else {
+      return next({ name: 'Orders' });
+    }
   }
 
   next();
