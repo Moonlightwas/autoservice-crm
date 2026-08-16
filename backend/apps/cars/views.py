@@ -51,4 +51,8 @@ class CarViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         user = self.request.user
-        serializer.save(owner=user)
+
+        if (user.is_superuser or user.is_staff or user.role in ("manager", "admin")):
+            serializer.save()
+        else:
+            serializer.save(owner=user)

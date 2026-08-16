@@ -67,7 +67,7 @@ class CarDetailSerializer(serializers.ModelSerializer):
 
 class CarCreateSerializer(serializers.ModelSerializer):
     owner = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.filter(role="client"),
+        queryset=User.objects.all(),
         error_messages={"does_not_exist": "Invalid car's owner"}
     )
 

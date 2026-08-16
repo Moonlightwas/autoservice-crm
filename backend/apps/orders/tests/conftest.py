@@ -23,20 +23,20 @@ def client() -> APIClient:
     return APIClient()
 
 
-def _test_user():
+@pytest.fixture
+def test_user_client():
     return User.objects.create_user(
         email=fake.email(),
         password=USER_PASSWORD,
-        password_confirm=USER_PASSWORD,
         first_name=fake.first_name(),
         last_name=fake.last_name(),
-        phone=fake.phone_number(),
+        phone=fake.phone_number()
     )
 
 
-def _test_car():
+def _test_car() -> Car:
     return Car.objects.create(
-        client=_test_user(),
+        client=test_user_client(),
         brand=fake.company(),
         model=fake.word(),
         year=fake.year(),
@@ -47,4 +47,8 @@ def _test_car():
 
 @pytest.fixture
 def test_order_data():
-    pass
+    return {
+        "client": _test_user().id,
+        "car": _test_car().id(),
+        "description": fake.text(max_nb_chars=100)
+    }
