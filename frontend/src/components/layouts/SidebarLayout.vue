@@ -76,6 +76,7 @@ import { ref, computed } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 
 const authStore = useAuthStore();
+const user = authStore.user;
 
 const isSidebarOpen = ref(false);
 
@@ -84,7 +85,7 @@ const toggleSidebar = () => {
 };
 
 const isAdmin = computed(() => {
-  return ['manager', 'admin'].includes(authStore.user?.role);
+  return user && ['manager', 'admin'].includes(user.role);
 });
 
 const isStaff = computed(() => {

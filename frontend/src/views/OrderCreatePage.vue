@@ -9,14 +9,17 @@
         <div class="flex-grow-1">
           <div v-if="isAdmin">
             <div class="col mb-3">
-              <FormInput
+              <FormSelect
                 id="client"
                 label="Client"
-                type="text"
                 v-model="clientId"
+                option-type="user"
+                :options="clients"
+                :reduce="option => option.id"
                 :error-source="error"
               />
             </div>
+
             <div class="col mb-3">
               <label class="form-label">Source</label>
               <select class="form-control" v-model="source">
@@ -25,31 +28,37 @@
                 <option value="phone">Phone</option>
               </select>
             </div>
+            <div v-if="error?.source" class="invalid-feedback d-block">
+              {{ error.source[0] }}
+            </div>
           </div>
+
           <div class="col mb-3">
-            <label class="form-label">Car</label>
-            <select class="form-control" v-model="carId">
-              <option
-                v-for="car in userCars" 
-                :key="car.id"
-                :value="car.id"
-              >
-                {{ car.brand }} {{ car.model }} ({{ car.plate_number }})
-              </option>
-            </select>
+            <FormSelect
+              id="car"
+              label="Car"
+              v-model="carId"
+              option-type="car"
+              :options="userCars"
+              :error-source="error"
+            />
             <router-link class="create-car-link" :to="{ name: 'CarCreate' }" @click="toggleSidebar">
               <i class="bi bi-plus"></i>Add new car
             </router-link>
           </div>
+
           <div class="col mb-3">
-            <label class="form-label">Discribe your problem</label>
-            <textarea
+            <FormInput
+              id="description"
+              type="textarea"
+              label="Discribe your problem"
+              rows="4"
               v-model="description"
-              class="form-control"
               placeholder="Type here"
-            >
-            </textarea>
+              :error-source="error"
+            />
           </div>
+          
           <div class="col mb-3">
             <label class="form-label">Photo(optional)</label>
             <input
@@ -60,7 +69,7 @@
           </div>
           
           <div class="control-buttons">
-            <button class="btn btn-primary btn-sm ms-2" @click="saveOrder">Save</button>
+            <button class="btn btn-primary btn-sm ms-2" @click="saveOrder">Create</button>
             <button class="btn btn-secondary btn-sm ms-2" @click="cancelEdit">Cancel</button>
           </div>
         </div>
@@ -75,29 +84,36 @@ import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 import { computed } from 'vue';
 import { getCars } from '@/services/api';
-import { createOrder } from '@/services/api';
+import { createOrder, getUsers } from '@/services/api';
+import FormSelect from '@/components/FormSelect.vue';
 import FormInput from '@/components/FormInput.vue';
 
 const router = useRouter();
 const authStore = useAuthStore();
 
 const user = authStore.user;
+const clients = ref([]);
 const userCars = ref([]);
 const clientId = ref('');
-const source = ref('');
-// search params
+const source = ref(null);
+// save request body params
 const carId = ref('');
 const description = ref('');
 
 const error = ref('');
 
 const isAdmin = computed(() => {
-  return ['manager', 'admin'].includes(user.role);
+  return user && ['manager', 'admin'].includes(user.role);
 });
 
 const cancelEdit = () => {
   router.back();
 };
+
+const getClients = async () => {
+  const response = await getUsers();
+  clients.value = response.data.results;
+}
 
 const getUserCars = async () => {
   const response = await getCars();
@@ -129,6 +145,7 @@ const saveOrder = async () => {
 };
 
 onMounted(() => {
+  if (isAdmin.value) getClients();
   getUserCars();
 });
 </script>
@@ -144,12 +161,6 @@ onMounted(() => {
   text-decoration: none;
 }
 
-.card textarea {
-  overflow: hidden;
-  max-height: 1500px;
-  height: auto;
-  resize: none;
-}
 .control-buttons {
   display: flex;
   justify-content: flex-end;

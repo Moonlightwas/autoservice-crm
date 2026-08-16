@@ -118,15 +118,8 @@ export const getCar = (id) => {
   return api.get(`cars/${id}`)
 }
 
-export const createCar = (client, brand, model, year, vin, plate_number) => {
-  return api.post('cars/', {
-    client,
-    brand,
-    model,
-    year,
-    vin,
-    plate_number
-  })
+export const createCar = (params) => {
+  return api.post('cars/', params)
 }
 
 export default api;

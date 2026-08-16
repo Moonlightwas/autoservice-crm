@@ -9,10 +9,10 @@ import OrdersPage from '@/views/OrdersPage.vue'
 import OrderDetailPage from '@/views/OrderDetailPage.vue'
 import OrderCreatePage from '@/views/OrderCreatePage.vue'
 import CarsPage from '@/views/CarsPage.vue'
-import CarCreate from '@/views/CarCreate.vue'
-import CarDetail from '@/views/CarDetail.vue'
+import CarCreatePage from '@/views/CarCreatePage.vue'
+import CarDetailPage from '@/views/CarDetailPage.vue'
 import StaffPage from '@/views/StaffPage.vue'
-import StaffDetail from '@/views/StaffDetail.vue'
+import StaffDetailPage from '@/views/StaffDetailPage.vue'
 import HomePage from '@/views/HomePage.vue'
 
 
@@ -92,13 +92,13 @@ const routes = [
   {
     path: '/cars/:id',
     name: 'CarDetail',
-    component: CarDetail,
+    component: CarDetailPage,
     meta: {title: 'Cars', requiresAuth: true}
   },
   {
     path: '/cars/create',
     name: 'CarCreate',
-    component: CarCreate,
+    component: CarCreatePage,
     meta: {title: 'Cars', requiresAuth: true}
   },
 
@@ -111,7 +111,7 @@ const routes = [
   {
     path: '/staff/:id',
     name: 'StaffDetail',
-    component: StaffDetail,
+    component: StaffDetailPage,
     meta: {title: 'Staff', requiresAuth: true}
   },
 

@@ -9,26 +9,18 @@
         <div class="flex-grow-1">
           <div v-if="isAdmin">
             <div class="col mb-3">
-              <v-select
+              <FormSelect
+                id="owner"
+                label="Owner"
                 v-model="carOwnerId"
-                :options="owners"
-                :reduce="owner => owner.id"
-                label="email"
-                placeholder="Search by email, phone or name..."
-                :class="{ 'is-invalid': error?.owner }"
-              >
-                <template #option="{ email, first_name, last_name, id }">
-                  <div class="owner-option">
-                    <span class="owner-email">{{ email }}</span>
-                    <span v-if="first_name || last_name" class="owner-name">
-                      ({{ first_name }} {{ last_name }})
-                    </span>
-                    <span class="owner-id">#{{ id }}</span>
-                  </div>
-                </template>
-              </v-select>
+                option-type="user"
+                :options="clients"
+                :reduce="option => option.id"
+                :error-source="error"
+              />
             </div>
           </div>
+
           <div class="col mb-3">
             <FormInput
               id="brand"
@@ -38,6 +30,7 @@
               :error-source="error"
             />
           </div>
+
           <div class="col mb-3">
             <FormInput
               id="model"
@@ -47,6 +40,7 @@
               :error-source="error"
             />
           </div>
+
           <div class="col mb-3">
             <FormInput
               id="year"
@@ -58,6 +52,7 @@
               max="2100"
             />
           </div>
+
           <div class="col mb-3">
             <FormInput
               id="vin"
@@ -67,6 +62,7 @@
               :error-source="error"
             />
           </div>
+
           <div class="col mb-3">
             <FormInput
               id="plate_number"
@@ -78,7 +74,7 @@
           </div>
           
           <div class="control-buttons">
-            <button class="btn btn-primary btn-sm ms-2" @click="handleCreateCar">Save</button>
+            <button class="btn btn-primary btn-sm ms-2" @click="handleCreateCar">Create</button>
             <button class="btn btn-secondary btn-sm ms-2" @click="cancelEdit">Cancel</button>
           </div>
         </div>
@@ -88,13 +84,14 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 import { ref, computed } from 'vue';
-import { createCar } from '@/services/api';
+import { createCar, getUsers } from '@/services/api';
 import FormInput from '@/components/FormInput.vue';
+import FormSelect from '@/components/FormSelect.vue';
 import 'vue-select/dist/vue-select.css';
-
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -103,6 +100,7 @@ const user = authStore.user;
 
 const error = ref('');
 
+const clients = ref([]);
 const carOwnerId = ref('');
 const carBrand = ref('');
 const carModel = ref('');
@@ -111,26 +109,31 @@ const carVIN = ref('');
 const carPlateNumber = ref('');
 
 const isAdmin = computed(() => {
-  return ['manager', 'admin'].includes(user.role);
+  return user && ['manager', 'admin'].includes(user.role);
 });
 
 const cancelEdit = () => {
   router.back();
 };
 
+const getClients = async () => {
+  const response = await getUsers();
+  clients.value = response.data.results;
+}
+
 const handleCreateCar = async () => {
   error.value = '';
 
   try {
-    carOwnerId.value = isAdmin.value ? carOwnerId.value : user.id;
-    await createCar(
-      carOwnerId.value,
-      carBrand.value,
-      carModel.value,
-      carYear.value,
-      carVIN.value,
-      carPlateNumber.value
-    );
+    const params = {
+      owner : isAdmin.value ? carOwnerId.value : user.id,
+      brand : carBrand.value,
+      model : carModel.value,
+      year : carYear.value,
+      vin : carVIN.value,
+      plate_number : carPlateNumber.value
+    };
+    await createCar(params);
 
     router.back();
   } catch (err) {
@@ -139,6 +142,10 @@ const handleCreateCar = async () => {
     }
   }
 };
+
+onMounted(() => {
+  if (isAdmin.value) getClients();
+});
 </script>
 
 <style scoped>

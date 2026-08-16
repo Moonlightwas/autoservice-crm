@@ -2,7 +2,7 @@
   <app-header />
 
   <main class="main-content">
-    <SidebarLayout v-if="authStore.isAuthenticated">
+    <SidebarLayout v-if="authStore.isAuthenticated && $route.meta.requiresAuth === true">
       <router-view />
     </SidebarLayout>
 

@@ -101,9 +101,10 @@ import { forceStatus } from '@/services/api';
 import { useAuthStore } from '@/stores/auth';
 
 const authStore = useAuthStore();
+const user = authStore.user;
 
 const isAdmin = computed(() => {
-  return ['manager', 'admin'].includes(authStore.user?.role);
+  return user && ['manager', 'admin'].includes(user.role);
 });
 
 const isClient = computed(() => {

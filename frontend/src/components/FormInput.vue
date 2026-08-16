@@ -1,30 +1,38 @@
 <template>
-  <div class="mb-3">
-    <label :for="id" class="form-label">{{ label }}</label>
-    <div class="input-group">
-      <input
-        :id="id"
-        :type="inputType"
-        :value="modelValue"
-        @input="$emit('update:modelValue', $event.target.value)"
-        :class="['form-control', { 'is-invalid': hasError }]"
-        v-bind="$attrs"
-      />
+  <label :for="id" class="form-label">{{ label }}</label>
+  <textarea
+    v-if="type === 'textarea'"
+    :id="id"
+    :value="modelValue"
+    @input="$emit('update:modelValue', $event.target.value)"
+    :class="['form-control', { 'is-invalid': hasError }]"
+    :placeholder="placeholder"
+    v-bind="$attrs"
+  ></textarea>
+  
+  <div v-else class="input-group">
+    <input
+      :id="id"
+      :type="inputType"
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target.value)"
+      :class="['form-control', { 'is-invalid': hasError }]"
+      v-bind="$attrs"
+    />
 
-      <button
-        v-if="type === 'password'"
-        class="btn"
-        type="button"
-        @click="toggleVisibility"
-      >
-      
-        <i :class="isVisible ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-      </button>
-    </div>
+    <button
+      v-if="type === 'password'"
+      class="btn"
+      type="button"
+      @click="toggleVisibility"
+    >
+    
+      <i :class="isVisible ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+    </button>
+  </div>
 
-    <div v-if="hasError" class="invalid-feedback d-block">
-      {{ errorMessage }}
-    </div>
+  <div v-if="hasError" class="invalid-feedback d-block">
+    {{ errorMessage }}
   </div>
 </template>
 
@@ -83,3 +91,10 @@ export default {
   }
 }
 </script>
+
+<style>
+textarea {
+  height: auto;
+  resize: none;
+}
+</style>

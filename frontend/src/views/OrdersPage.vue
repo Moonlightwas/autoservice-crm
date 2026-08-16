@@ -25,7 +25,6 @@
                   :class="{ active: activeFilter == filter.value }"
                 >
                   {{ filter.label }}
-                  <!-- <span class="badge bg-secondary ms-1">{{ fetchOrdersCount() }}</span> -->
                 </a>
               </li>
             </ul>
