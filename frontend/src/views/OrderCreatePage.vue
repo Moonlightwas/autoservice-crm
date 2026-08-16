@@ -123,16 +123,10 @@ const getUserCars = async () => {
 const saveOrder = async () => {
   try {
     const params = {};
-    if (isAdmin.value) {
-      params.source = source.value;
-      params.client = clientId.value;
-      params.car = carId.value;
-      params.description = description.value;
-    } else {
-      params.client = user.id;
-      params.car = carId.value;
-      params.description = description.value;
-    }
+    params.source = isAdmin.value ? source.value : 'online';
+    params.client = isAdmin.value ? clientId.value : user.id;
+    params.car = carId.value;
+    params.description = description.value;
 
     await createOrder(params);
 
