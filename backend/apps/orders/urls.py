@@ -18,7 +18,7 @@ urlpatterns = [
 
 
     path("<int:pk>/force-status/", OrderViewSet.as_view({
-        "patch": "force_status"
+        "post": "force_status"
     }), name="order-force-status"),
 
     path("<int:pk>/confirm/", OrderViewSet.as_view({

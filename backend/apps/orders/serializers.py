@@ -63,6 +63,10 @@ class OrderCreateSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
 
         user = request.user
+
+        if user.is_superuser or user.is_staff or user.role in ("manager", "admin"):
+            return attrs
+
         client = attrs.get("client", user)
         car = attrs.get("car")
 
@@ -80,3 +84,7 @@ class OrderCreateSerializer(serializers.ModelSerializer):
             representation["car"] = CarSerializer(instance.car).data
 
         return representation
+
+
+class OrderForceStatusSerializer(serializers.Serializer):
+    status = serializers.CharField()

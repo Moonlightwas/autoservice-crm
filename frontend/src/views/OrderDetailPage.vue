@@ -3,7 +3,7 @@
     <div class="order-header">
       <div>
         <h3 class="mb-0">Order #{{ order.id }}</h3>
-        <div>
+        <div class="row">
           <span class="order-meta">Created {{ formatDate(order.created_at) }}</span>
           <span class="order-meta">Updated {{ formatDate(order.updated_at) }}</span>
         </div>
@@ -20,7 +20,9 @@
               <i class="bi bi-images"></i>
             </div>
             <div>
-              <h6 class="mb-1 fw-bold">{{ order.car?.brand }} {{ order.car?.model }}</h6>
+              <router-link class="car-header" :to="{ name: 'CarDetail', params: { id: order.car?.id } }">
+                <h6 class="mb-1 fw-bold">{{ order.car?.brand }} {{ order.car?.model }}</h6>
+              </router-link>
               <div class="text-muted small">
                 <div>Year: {{ order.car?.year }}</div>
                 <div class="font-monospace mt-1">VIN: {{ order.car?.vin || '—' }}</div>
@@ -196,8 +198,15 @@ const isPassed = (status) => {
   margin-bottom: 24px;
 }
 .order-meta {
-  font-size: 14px;
+  padding: 2px 12px 2px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6c757d;
+}
 
+.car-header {
+  color: black;
+  text-decoration: none;
 }
 
 .description-header {

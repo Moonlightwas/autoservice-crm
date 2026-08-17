@@ -7,8 +7,10 @@ from rest_framework.exceptions import PermissionDenied
 
 from .serializers import (
     OrderSerializer,
+    OrderCreateSerializer,
     OrderListSerializer,
-    OrderDetailSerializer
+    OrderDetailSerializer,
+    OrderForceStatusSerializer
 )
 from .models import Order
 from apps.core.permissions import IsOrderStaff
@@ -18,10 +20,14 @@ class OrderViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsOrderStaff]
 
     def get_serializer_class(self):
-        if self.action == "list":
+        if self.action == "create":
+            return OrderCreateSerializer
+        elif self.action == "list":
             return OrderListSerializer
         elif self.action == "retrieve":
             return OrderDetailSerializer
+        elif self.action == "force_status":
+            return OrderForceStatusSerializer
         return OrderSerializer
 
     def get_queryset(self):
@@ -88,7 +94,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             status.HTTP_400_BAD_REQUEST
         )
 
-    @action(detail=True, methods=["patch"])
+    @action(detail=True, methods=["post"])
     def force_status(self, request, pk=None):
         order = self.get_object()
         user = request.user
@@ -97,6 +103,10 @@ class OrderViewSet(viewsets.ModelViewSet):
             return Response(
                 {"detail": "User doesn't has permission"},
                 status.HTTP_403_FORBIDDEN)
+
+        serializer = self.get_serializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         new_status = request.data.get("status")
         if order.set_status_force(new_status):

@@ -99,7 +99,7 @@ export const createOrder = (params) => {
 }
 
 export const forceStatus = (id, params) => {
-  return api.patch(`orders/${id}/force-status/`, params)
+  return api.post(`orders/${id}/force-status/`, params)
 }
 
 export const getUsers = (params) => {
