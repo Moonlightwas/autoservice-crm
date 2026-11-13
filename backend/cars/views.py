@@ -9,7 +9,7 @@ from .serializers import (
     CarCreateSerializer
 )
 from .models import Car
-from apps.core.permissions import IsCarOwner
+from api.permissions import IsCarOwner
 
 
 class CarViewSet(viewsets.ModelViewSet):

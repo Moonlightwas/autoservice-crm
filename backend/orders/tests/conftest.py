@@ -4,7 +4,7 @@ from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from faker import Faker
 
-from apps.cars.models import Car
+from cars.models import Car
 
 
 User = get_user_model()

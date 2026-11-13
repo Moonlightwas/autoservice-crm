@@ -13,7 +13,7 @@ from .serializers import (
     OrderForceStatusSerializer
 )
 from .models import Order
-from apps.core.permissions import IsOrderStaff
+from api.permissions import IsOrderStaff
 
 
 class OrderViewSet(viewsets.ModelViewSet):

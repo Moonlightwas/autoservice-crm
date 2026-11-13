@@ -9,7 +9,7 @@ from .serializers import (
     ProfileSerializer, ProfileUpdateSerializer, UserListSerializer, UserDetailSerializer
 )
 from .exceptions import UserNotFound
-from apps.core.permissions import IsManagerOrAdmin
+from api.permissions import IsManagerOrAdmin
 
 
 User = get_user_model()

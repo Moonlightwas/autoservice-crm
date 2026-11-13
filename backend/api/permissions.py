@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from apps.orders.models import Order
+from orders.models import Order
 
 
 class IsManagerOrAdmin(permissions.BasePermission):

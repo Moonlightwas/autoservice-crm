@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
 from .models import Order
-from apps.cars.models import Car
-from apps.cars.serializers import CarSerializer
+from cars.models import Car
+from cars.serializers import CarSerializer
 
 
 class OrderSerializer(serializers.ModelSerializer):
