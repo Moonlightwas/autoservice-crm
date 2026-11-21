@@ -14,7 +14,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'secret-key')
 
 DEBUG = os.getenv('DEBUG', False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 INSTALLED_APPS = [
@@ -27,7 +27,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
-
     'users',
     'orders',
     'cars',
@@ -142,7 +141,5 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
-    "http://localhost",
     "http://127.0.0.1:8080",
-    "http://127.0.0.1",
 ]
