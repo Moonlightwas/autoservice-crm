@@ -10,31 +10,30 @@ services:
       - postgres_data:/var/lib/postgresql/data
     env_file:
       - backend/.env
+    ports:
+      - 5432:5432
   
   backend:
     build: ./backend
+    entrypoint: []
     env_file:
       - backend/.env
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - static:/backend_static
       - media:/app/media
+      - ./backend:/app
     depends_on:
       - db
+    ports:
+      - 8000:8000
 
   frontend:
     build: ./frontend
     env_file:
       - frontend/.env
+    command: npm run serve -- --port 3000 
     volumes:
-      - static:/frontend_static
-
-  nginx:
-    build: ./nginx
-    volumes:
-      - static:/static
-      - media:/media
+      - ./frontend:/app
     ports:
-      - "80:80"
-    depends_on:
-      - backend
-    restart: unless-stopped
+     - 3000:3000

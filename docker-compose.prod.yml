@@ -1,0 +1,40 @@
+volumes:
+  postgres_data:
+  static:
+  media:
+
+services:
+  db:
+    image: postgres:17-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - backend/.env
+  
+  backend:
+    build: ./backend
+    env_file:
+      - backend/.env
+    volumes:
+      - static:/backend_static
+      - media:/app/media
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    env_file:
+      - frontend/.env
+    volumes:
+      - static:/frontend_static
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - static:/static
+      - media:/media
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
