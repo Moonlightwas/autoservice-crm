@@ -30,35 +30,51 @@ CRM для автоматизации процессов автосервиса.
 - Docker compose
 - Nginx
 
-# Getting started
+# Запуск
 ``` bash
 git clone https://github.com/Moonlightwas/autoservice-crm.git
 cd autoservice-crm
 ```
 
-Необходимо настроить переменные окружения
+Настройка переменных окружения
 ``` bash
 cp backend/.env.example backend/.env
 cp frontend/.env.example .frontend/.env
 ```
-
-Запуск
+# Docker
+## Dev
+Для локальной разработки. Контейнеры монтирует католг с хоста, любые изменения в бэке иил фронте будут отображаться сразу.
 ``` bash
-docker compose up -d --build
+docker compose -f docker-compse.dev.yml up -d --build
 ```
+### Доступ
+http://localhost:3000 -> frondend \
+http://localhost:8000 -> backend
 
-# Доступ
+## Prod
+Для запуска на удаленном сервере Все запросы идут через nginx.
+``` bash
+docker compose -f docker-compse.prod.yml up -d --build
+```
+### Доступ
 http://localhost -> frondend \
 http://localhost/api/ -> backend \
 http://localhost/admin -> django admin
 
 # Tests
-Django tests
+Backend tests
+
+При запуске вне контейнера нужно указать POSTGRES_HOST=localhost в .env 
 ``` bash
 cd backend/ && pytest
 ```
 
-При запуске контейнера автоматически создаются пользователи
+Запуск тестов в контейнере
+``` bash
+docker compose -f docker-compose.dev.yml exec backend pytest
+```
+
+При запуске docker-compse.prod.yml автоматически создаются тестовые пользователи
 
 Role | Email | Password |
 |---|--------|----------|
